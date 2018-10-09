@@ -1,0 +1,112 @@
+#!/bin/bash
+#A tool to install YSFReflector.
+#This is essentially a scripted version of:
+#https://register.ysfreflector.de/installation
+#Step 1: Install Debian 8 or 9 and make sure it has internet and is up to date.
+#Step 2: Run this script
+#Step 3: To start YSFReflector: '/YSFRflector/YSFRflector YSFRflector.ini'
+#Step 4: To stop YSFReflector: ps aux | grep YSFreflector, then kill the pid. ##It's Ugly, for now...
+#Lets begin-------------------------------------------------------------------------------------------------
+WHO=$(whoami)
+#Have to be ROOT to run this script
+if [ "$WHO" != "root" ]
+then
+  echo ""
+  echo "You Must be root to run this script!!"
+  exit 0
+fi
+#Has to be a Debian variant.
+if [ ! -e "/etc/debian_version" ]
+then
+  echo ""
+  echo "This script is only tested in Debian 8,9 and x64 cpu Arch. for now."
+  #echo "This script is only tested in Debian 8,9 and Raspian Stretch for now."
+  exit 0
+fi
+#Asking for user input and validating....
+echo "------------------------------------------------------------------------------"
+echo ""
+read -p "What will the name of your reflector be? 16 Characters MAX, this includes spaces. " YSFNAME
+YSFNAMEC=$(expr length "$YSFNAME")
+until [ $YSFNAMEC -le 16 ]
+do
+read -p "What will the name of your reflector be? 16 Characters MAX, this includes spaces. " YSFNAME
+YSFNAMEC=$(expr length "$YSFNAME")
+done
+echo "------------------------------------------------------------------------------"
+echo ""
+read -p "What is the description? 14 Characters MAX, this includes spaces. " YSFDESC
+YSFDESCC=$(expr length "$YSFDESC")
+until [ $YSFDESCC -le 14 ]
+do
+read -p "What is the description? 14 Characters MAX, this includes spaces. " YSFDESC
+YSFDESCC=$(expr length "$YSFDESC")
+done
+
+#Install dependicies
+echo ""
+echo "Installing required software... "
+apt-get -y install wget
+apt-get -y install git
+apt-get -y install build-essential
+
+#Make Directories
+echo ""
+echo "Creating YSF directories... "
+mkdir -p /YSFReflector
+mkdir -p /root/YSFReflector-install-files
+#If the file is here already, then we dont need to compile on top of it. Remove the git clone directory and start over.
+if [ -e /root/YSFReflector-install-files/YSFClients/YSFReflector/YSFReflector ]
+then
+   echo ""
+   echo "It looks like you have already compiled YSFReflector. If you want to install it again, delete the directory '/root/YSFReflector-install-files' and run this script again. "
+   exit 0
+else
+   echo ""
+   echo "Downloading and compiling YSFReflector... "
+   cd /root/YSFReflector-install-files
+   git clone https://github.com/g4klx/YSFClients.git
+   cd /root/YSFReflector-install-files/YSFClients/YSFReflector
+   make clean all
+fi
+#Now the file should be there, if it compiled correctly.
+if [ -e /root/YSFReflector-install-files/YSFClients/YSFReflector/YSFReflector ]
+then
+   echo "------------------------------------------------------------------------------"
+   echo "It looks like everything compiled successfully. There is a 'YSFReflector' application file. "
+else
+   echo ""
+   echo "UH OH!! I dont see the YSFReflector application file after attempting to compile. The output above is the only indication as to why it might have failed. Removing install files and directories. "
+   # Removing install files and Directories
+   rm -rf /YSFReflector /root/YSFReflector-install-files
+   exit 0
+fi
+
+#Copying over files.
+echo ""
+echo "Copying files over to the executable directory.... "
+cp /root/YSFReflector-install-files/YSFClients/YSFReflector/YSFReflector /YSFReflector
+cp /root/YSFReflector-install-files/YSFClients/YSFReflector/YSFReflector.ini /YSFReflector
+
+#Updating the ini file
+echo ""
+echo "Updating ini file in /YSFReflector. "
+sed -i "s/16[ ]*characters[ ]*max/$YSFNAME/g" /YSFReflector/YSFReflector.ini
+sed -i "s/14[ ]*characters[ ]*max/$YSFDESC/g" /YSFReflector/YSFReflector.ini
+sed -i "s/FilePath=./FilePath=\/var\/log\/YSFReflector\//g" /YSFReflector/YSFReflector.ini
+
+#Creating mmdvm user that is apparently required for this to run. I assume this can be changed if someone knows C before compiling it. 
+groupadd mmdvm
+useradd mmdvm -g mmdvm -s /sbin/nologin
+mkdir -p /var/log/YSFReflector
+chown mmdvm: /var/log/YSFReflector
+echo "------------------------------------------------------------------------------"
+echo "This concludes the install of YSFReflector..... "
+echo "Remember to register your YSF Reflector at https://register.ysfreflector.de/register. "
+echo ""
+echo ""
+echo "YSFReflector is installed and ready to use: "
+echo "To start YSFReflector, run: '/YSFRflector/YSFRflector YSFRflector.ini' "
+echo ""
+echo "To stop YSFReflector: 'ps aux | grep YSFreflector', then kill the pid." #see github.com/n5amd
+echo "------------------------------------------------------------------------------"
