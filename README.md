@@ -1,5 +1,5 @@
 # YSFReflector-debian-installer
-This is a simple script that runs through the steps of the install at: https://register.ysfreflector.de/installation. The script currently does not have a startup/stop script and is only compatible with Debian.
+This is a simple script that runs through the steps of the install at: https://register.ysfreflector.de/installation. The script currently does not have a startup/stop script and is only tested on Debian.
 ******
 
 To start YSFReflector, run: '/YSFRflector/YSFRflector YSFRflector.ini' 
