@@ -86,8 +86,8 @@ fi
 #Copying over files.
 echo ""
 echo "Copying files over to the executable directory.... "
-cp /root/reflector-install-files/ysfreflector/YSFClients/YSFReflector/YSFReflector/YSFReflector /ysfreflector
-cp /root/reflector-install-files/ysfreflector/YSFClients/YSFReflector/YSFReflector/YSFReflector.ini /ysfreflector
+cp /root/reflector-install-files/ysfreflector/YSFClients/YSFReflector/YSFReflector /ysfreflector
+cp /root/reflector-install-files/ysfreflector/YSFClients/YSFReflector/YSFReflector.ini /ysfreflector
 
 #Updating the ini file
 echo ""
