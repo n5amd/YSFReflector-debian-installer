@@ -67,7 +67,7 @@ then
 else
    echo ""
    echo "Downloading and compiling YSFReflector... "
-   cd /root/reflector-install-files
+   cd /root/reflector-install-files/ysfreflector
    git clone https://github.com/g4klx/YSFClients.git
    cd /root/reflector-install-files/ysfreflector/YSFClients/YSFReflector
    make clean all
