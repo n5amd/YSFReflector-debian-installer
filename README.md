@@ -1,5 +1,5 @@
 # YSFReflector-debian-installer
-This is a simple script to install YSFReflector. This script essentially runs through the official steps found at: https://register.ysfreflector.de/installation for you for your convenience. All you need to provide before hand is have a Debian 9.x server ready and updated. 
+This is a simple script to install YSFReflector. This script essentially runs through the official steps found at: https://register.ysfreflector.de/installation for your convenience. All you need to provide before hand is have a Debian 9.x server ready and updated. 
 
 
 
