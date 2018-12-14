@@ -47,13 +47,10 @@ echo ""
 echo "------------------------------------------------------------------------------"
 echo "Installing required software... "
 apt-get -y install $DEP
-
-#Make Directories
 echo ""
 echo "Creating YSF directories... "
 mkdir -p $YSFINSTDIR
 mkdir -p $YSFAPPDIR
-#If the file is here already, then we dont need to compile on top of it. Remove the git clone directory and start over.
 if [ -e $YSFINSTDIR/YSFClients/YSFReflector/YSFReflector ]
 then
    echo ""
@@ -69,7 +66,6 @@ else
    cd $YSFINSTDIR/YSFClients/YSFReflector
    make clean all
 fi
-#Now the file should be there, if it compiled correctly.
 if [ -e $YSFINSTDIR/YSFClients/YSFReflector/YSFReflector ]
 then
    echo ""
@@ -80,8 +76,6 @@ else
    echo "UH OH!! I dont see the YSFReflector application file after attempting to compile. The output above is the only indication as to why it might have failed. To Try again Remove '/root/reflector-install-files'. "
    exit 0
 fi
-
-#Copying over files.
 echo ""
 echo "Copying files over to the executable directory...... "
 cp $YSFINSTDIR/YSFClients/YSFReflector/YSFReflector $YSFAPPDIR
