@@ -19,5 +19,5 @@ systemctl start|stop|status|restart ysfreflector
 
 **For more information, please visit:**
 
-https://sadigitalradio.com/
+https://n5amd.com/
 
