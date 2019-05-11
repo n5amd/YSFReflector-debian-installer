@@ -22,9 +22,12 @@ then
 fi
 DIRDIR=$(pwd)
 YSFREPO=https://github.com/g4klx/YSFClients.git
-DEP="wget git build-essential"
+YSFDASHREPO=https://github.com/dg9vh/YSFReflector-Dashboard.git
+DEP="wget git build-essential apache2 php libapache2-mod-php php7.0-mbstring"
 YSFINSTDIR=/root/reflector-install-files/ysfreflector
 YSFAPPDIR=/ysfreflector
+YSFDASDIR=/root/reflector-install-files/ysfdash
+YSFWEBDIR=/var/www/ysf
 echo ""
 echo "------------------------------------------------------------------------------"
 read -p "What will the name of your reflector be? 16 Characters MAX, this includes spaces. " YSFNAME
@@ -43,6 +46,9 @@ do
 read -p "What is the description? 14 Characters MAX, this includes spaces. " YSFDESC
 YSFDESCC=$(expr length "$YSFDESC")
 done
+echo "------------------------------------------------------------------------------"
+echo ""
+read -p "What is the FQDN of the YSF Reflector dashboard? Example: ysf.domain.com  " YSFDOMAIN
 echo ""
 echo "------------------------------------------------------------------------------"
 echo "Installing required software... "
@@ -91,11 +97,27 @@ chown mmdvm: /var/log/YSFReflector
 echo "Copying ysfrelfector to systemd...... "
 cp $DIRDIR/templates/ysfreflector.service /etc/systemd/system
 systemctl daemon-reload
+echo "------------------------------------------------------------------------------"
+echo "Installing the YSF Dashboard and configuring apache... "
+echo "------------------------------------------------------------------------------"
+cd $YSFDASDIR
+git clone $YSFDASHREPO
+cp -R $YSFDASDIR/YSFReflector-Dashboard/* $YSFWEBDIR/
+mkdir $YSFWEBDIR/config
+cp $DIRDIR/templates/config.php $YSFWEBDIR/config/
+mv $YSFWEBDIR/setup.php $YSFDASDIR/original-setup.php
+#Copy apache vhost files over for ysf
+cp $DIRDIR/templates/apache.tbd.conf /etc/apache2/sites-available/$YSFDOMAIN.conf
+sed -i "s/apache.tbd/$YSFDOMAIN/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
+sed -i "s/ysf-xlxd/ysf/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
+a2ensite $YSFDOMAIN
+service apache2 restart
+systemctl start ysfreflector
 echo ""
 echo ""
 echo "******************************************************************************"
 echo ""
-echo "              This concludes the install of YSFReflector..... "
+echo "              This concludes the install of YSFReflector and Dashboard..... "
 echo ""
 echo "******************************************************************************"
 echo ""
@@ -105,5 +127,8 @@ echo ""
 echo "      To start YSFReflector: 'systemctl start ysfreflector'              "
 echo ""
 echo "      To stop YSFReflector:  'systemctl stop ysfreflector'               "
+echo ""
+echo "                Your web dashboard can be found at:                      "
+echo "                      http://$YSFDOMAIN                                  "
 echo ""
 echo "------------------------------------------------------------------------------"
