@@ -111,6 +111,7 @@ cp $DIRDIR/templates/apache.tbd.conf /etc/apache2/sites-available/$YSFDOMAIN.con
 sed -i "s/apache.tbd/$YSFDOMAIN/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
 sed -i "s/ysf-xlxd/ysf/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
 a2ensite $YSFDOMAIN
+a2enmod php7.0
 service apache2 restart
 systemctl start ysfreflector
 echo ""
