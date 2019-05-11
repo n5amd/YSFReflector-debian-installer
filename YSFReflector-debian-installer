@@ -112,6 +112,7 @@ mv $YSFWEBDIR/setup.php $YSFDASDIR/original-setup.php
 cp $DIRDIR/templates/apache.tbd.conf /etc/apache2/sites-available/$YSFDOMAIN.conf
 sed -i "s/apache.tbd/$YSFDOMAIN/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
 sed -i "s/ysf-xlxd/ysf/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
+chown -R www-data: $YSFWEBDIR
 a2ensite $YSFDOMAIN
 a2enmod php7.0
 service apache2 restart
