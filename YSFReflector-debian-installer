@@ -57,6 +57,8 @@ echo ""
 echo "Creating YSF directories... "
 mkdir -p $YSFINSTDIR
 mkdir -p $YSFAPPDIR
+mkdir -p $YSFWEBDIR
+mkdir -p $YSFDASDIR
 if [ -e $YSFINSTDIR/YSFClients/YSFReflector/YSFReflector ]
 then
    echo ""
