@@ -115,8 +115,8 @@ sed -i "s/ysf-xlxd/ysf/g" /etc/apache2/sites-available/$YSFDOMAIN.conf
 chown -R www-data: $YSFWEBDIR
 a2ensite $YSFDOMAIN
 a2enmod php7.0
-service apache2 restart
 systemctl start ysfreflector
+systemctl restart apache2
 echo ""
 echo ""
 echo "******************************************************************************"
@@ -128,7 +128,7 @@ echo ""
 echo "Remember to register your YSF Reflector at https://register.ysfreflector.de/register. "
 echo ""
 echo ""
-echo "      To start YSFReflector: 'systemctl start ysfreflector'              "
+echo "      To restart YSFReflector: 'systemctl restart ysfreflector'          "
 echo ""
 echo "      To stop YSFReflector:  'systemctl stop ysfreflector'               "
 echo ""
