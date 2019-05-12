@@ -99,6 +99,7 @@ chown mmdvm: /var/log/YSFReflector
 echo "Copying ysfrelfector to systemd...... "
 cp $DIRDIR/templates/ysfreflector.service /etc/systemd/system
 systemctl daemon-reload
+systemctl enable ysfreflector
 echo "------------------------------------------------------------------------------"
 echo "Installing the YSF Dashboard and configuring apache... "
 echo "------------------------------------------------------------------------------"
